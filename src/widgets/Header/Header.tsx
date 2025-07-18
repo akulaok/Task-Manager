@@ -1,13 +1,19 @@
-import type { JSX } from "@emotion/react/jsx-runtime";
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import type {JSX} from "@emotion/react/jsx-runtime";
+import {AppBar, Toolbar, Typography} from "@mui/material";
 
-function Header():JSX.Element {
+function Header(): JSX.Element {
   return (
     <>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: "#8995dc",
+          color: "white",
+        }}
+      >
         <Toolbar>
-          <Typography variant="h6" component="div" >
-              Task Manager
+          <Typography variant="h6" component="div">
+            Task Manager
           </Typography>
         </Toolbar>
       </AppBar>

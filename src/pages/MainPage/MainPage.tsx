@@ -1,19 +1,15 @@
 import type {JSX} from "@emotion/react/jsx-runtime";
-import {Container, Grid} from "@mui/material";
-import TaskColumn from "../../entities/task/ui/TaskColumn";
-import { TASK_STATUSES } from "../../entities/task/model/taskOptions";
-import { mockTasks } from "../../entities/task/model/mocks";
+import {Container} from "@mui/material";
+import {useSelector} from "react-redux";
+import {getTasks} from "../../entities/task/model/selectors/GetTasks";
+import TaskList from "../../entities/task/ui/TaskList";
 
 function MainPage(): JSX.Element {
+  const tasks = useSelector(getTasks);
   return (
     <>
       <Container>
-        <Grid container spacing={14}>
-          {TASK_STATUSES.map((status) => {
-            const tasks = mockTasks.filter((task) => (task.status == status));
-            return (<TaskColumn key={status} title={ status} tasks={tasks}></TaskColumn>)
-          })}
-        </Grid>
+        <TaskList tasks={tasks}></TaskList>
       </Container>
     </>
   );
