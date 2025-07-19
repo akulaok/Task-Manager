@@ -3,9 +3,9 @@ import {Container} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {getTasks} from "../../entities/task/model/selectors/GetTasks";
 import TaskList from "../../entities/task/ui/TaskList";
-import {getTaskFilters} from "../../entities/task/model/selectors/getTaskFilters ";
 import TaskFilterPanel from "../../entities/task/ui/TaskFilterPanel";
 import {setFilter} from "../../entities/task/model/taskFilterSlice";
+import { getTaskFilters } from "../../entities/task/model/selectors/GetTaskFilters ";
 
 function MainPage(): JSX.Element {
   const tasks = useSelector(getTasks);
