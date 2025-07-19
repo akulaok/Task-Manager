@@ -16,9 +16,10 @@ function TaskList({tasks}: TaskListProps) {
           xs: "1fr",
           sm: "repeat(2, 1fr)",
           md: "repeat(3, 1fr)",
-          lg: "repeat(4, 1fr)"
+          lg: "repeat(4, 1fr)",
         },
-        m: 3
+        mt: 3,
+        mb: 3,
       }}
     >
       {tasks.map((task) => (

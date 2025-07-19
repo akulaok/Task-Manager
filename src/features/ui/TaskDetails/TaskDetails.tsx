@@ -5,7 +5,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../../app/store";
 import {useState} from "react";
-import {Button, Chip, Stack, TextField} from "@mui/material";
+import {Button, Stack, TextField} from "@mui/material";
 import {
   TASK_CATEGORIES,
   TASK_PRIORITIES,
@@ -18,23 +18,8 @@ import type {
   TaskPriority,
   TaskStatus,
 } from "../../../entities/task/model/types";
-
-const modalBoxStyles = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: {
-    xs: "90vw", // для мобилки
-    sm: 500, // для десктопа
-  },
-  maxHeight: "90vh",
-  overflowY: "auto",
-  bgcolor: "background.paper",
-  borderRadius: 3,
-  boxShadow: 6,
-  p: 3,
-};
+import {modalBoxStyles} from "./styles";
+import TaskChipGroup from "../../../shared/ui/TaskChipGroup/TaskChipGroup";
 
 function TaskDetails() {
   const navigate = useNavigate();
@@ -69,15 +54,6 @@ function TaskDetails() {
     dispatch(updateTask(updatedTask));
     navigate(-1);
   };
-
-  const tagStyle = (selected: boolean) => ({
-    bgcolor: selected ? "#8995dc" : "#efefef",
-    color: selected ? "white" : "black",
-    cursor: "pointer",
-    "&:hover": {
-      bgcolor: selected ? "#6e7dd4" : "#efefef", // свой hover цвет
-    },
-  });
 
   return (
     <Modal
@@ -117,71 +93,35 @@ function TaskDetails() {
         <Typography variant="subtitle2" mb={1}>
           Категория
         </Typography>
-        <Stack
-          direction="row"
-          spacing={1}
-          mb={2}
-          rowGap={1}
-          flexWrap="wrap"
-          justifyContent="flex-start"
-        >
-          {TASK_CATEGORIES.map((label) => (
-            <Chip
-              key={label}
-              label={label}
-              onClick={() =>
-                setFormData({...formData, category: label as TaskCategory})
-              }
-              sx={tagStyle(formData.category === label)}
-            />
-          ))}
-        </Stack>
+        <TaskChipGroup
+          options={TASK_CATEGORIES}
+          onSelect={(label: string) =>
+            setFormData({...formData, category: label as TaskCategory})
+          }
+          selected={formData.category}
+        ></TaskChipGroup>
 
         <Typography variant="subtitle2" mb={1}>
           Статус
         </Typography>
-        <Stack
-          direction="row"
-          spacing={1}
-          mb={2}
-          rowGap={1}
-          flexWrap="wrap"
-          justifyContent="flex-start"
-        >
-          {TASK_STATUSES.map((label) => (
-            <Chip
-              key={label}
-              label={label}
-              onClick={() =>
-                setFormData({...formData, status: label as TaskStatus})
-              }
-              sx={tagStyle(formData.status === label)}
-            />
-          ))}
-        </Stack>
+        <TaskChipGroup
+          options={TASK_STATUSES}
+          selected={formData.status}
+          onSelect={(label) =>
+            setFormData({...formData, status: label as TaskStatus})
+          }
+        />
 
         <Typography variant="subtitle2" mb={1}>
           Приоритет
         </Typography>
-        <Stack
-          direction="row"
-          spacing={1}
-          mb={2}
-          rowGap={1}
-          flexWrap="wrap"
-          justifyContent="flex-start"
-        >
-          {TASK_PRIORITIES.map((label) => (
-            <Chip
-              key={label}
-              label={label}
-              onClick={() =>
-                setFormData({...formData, priority: label as TaskPriority})
-              }
-              sx={tagStyle(formData.priority === label)}
-            />
-          ))}
-        </Stack>
+        <TaskChipGroup
+          options={TASK_PRIORITIES}
+          selected={formData.priority}
+          onSelect={(label) =>
+            setFormData({...formData, priority: label as TaskPriority})
+          }
+        />
 
         <Stack direction="row" justifyContent="flex-end" spacing={1}>
           <Button

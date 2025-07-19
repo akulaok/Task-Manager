@@ -1,15 +1,32 @@
 import type {JSX} from "@emotion/react/jsx-runtime";
 import {Container} from "@mui/material";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getTasks} from "../../entities/task/model/selectors/GetTasks";
 import TaskList from "../../entities/task/ui/TaskList";
+import {getTaskFilters} from "../../entities/task/model/selectors/getTaskFilters ";
+import TaskFilterPanel from "../../entities/task/ui/TaskFilterPanel";
+import {setFilter} from "../../entities/task/model/taskFilterSlice";
 
 function MainPage(): JSX.Element {
   const tasks = useSelector(getTasks);
+  const filters = useSelector(getTaskFilters);
+  const dispatch = useDispatch();
+
+  const filteredTasks = tasks.filter((task) => {
+    const byPriority = !filters.priority || task.priority === filters.priority;
+    const byCategory = !filters.category || task.category === filters.category;
+    const byStatus = !filters.status || task.status === filters.status;
+    return byPriority && byCategory && byStatus;
+  });
+
   return (
     <>
       <Container>
-        <TaskList tasks={tasks}></TaskList>
+        <TaskFilterPanel
+          selected={filters}
+          onSelect={(key, value) => dispatch(setFilter({key, value}))}
+        />
+        <TaskList tasks={filteredTasks}></TaskList>
       </Container>
     </>
   );

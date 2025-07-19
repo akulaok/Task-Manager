@@ -1,6 +1,5 @@
 import type {JSX} from "@emotion/react/jsx-runtime";
 import {
-  Box,
   Button,
   Card,
   CardActions,
@@ -12,9 +11,23 @@ import {
 import type {Task} from "../model/types";
 import {useLocation, useNavigate} from "react-router-dom";
 import {getPriorityColors} from "../model/taskStyles";
+import {useCallback} from "react";
+import {actionSx, cardSx, descriptionSx, editBtnSx} from "./styles";
 
 interface TaskItemProps {
   task: Task;
+}
+
+function TaskChip({
+  label,
+  color,
+  bg,
+}: {
+  label: string;
+  color: string;
+  bg: string;
+}) {
+  return <Chip label={label} size="small" sx={{backgroundColor: bg, color}} />;
 }
 
 function TaskItem({task}: TaskItemProps): JSX.Element {
@@ -22,93 +35,38 @@ function TaskItem({task}: TaskItemProps): JSX.Element {
   const navigate = useNavigate();
   const priorityColor = getPriorityColors(task.priority);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     navigate(`/task/${task.id}`, {
       state: {backgroundLocation: location},
     });
-  };
+  }, [navigate, location, task.id]);
 
   return (
-    <Card
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        borderRadius: 4,
-        boxShadow: 3,
-        transition: "transform 0.2s",
-        "&:hover": {
-          transform: "scale(1.01)",
-        },
-      }}
-    >
+    <Card sx={cardSx}>
       <CardContent>
         <Typography variant="h6" gutterBottom sx={{color: "#2b85ca"}}>
           {task.title}
         </Typography>
 
         {task.description && (
-          <Typography
-            variant="body2"
-            sx={{
-              color: "#333",
-              display: "-webkit-box",
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
+          <Typography variant="body2" sx={descriptionSx}>
             {task.description}
           </Typography>
         )}
       </CardContent>
-      <CardActions
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "end",
-          p: 2,
-          alignItems: "flex-start",
-        }}
-      >
+
+      <CardActions sx={actionSx}>
         <Stack direction="row" spacing={1} sx={{mt: 1}}>
-          <Chip
-            label={task.status}
-            sx={{backgroundColor: "#8995dc", color: "white"}}
-            size="small"
-          />
-          <Chip
+          <TaskChip label={task.status} color="white" bg="#8995dc" />
+          <TaskChip
             label={task.priority}
-            sx={{backgroundColor: priorityColor.bg, color: priorityColor.color}}
-            size="small"
+            color={priorityColor.color}
+            bg={priorityColor.bg}
           />
-          <Chip
-            label={task.category}
-            sx={{
-              backgroundColor: "#2b85ca",
-              color: "white",
-            }}
-            size="small"
-          />
+          <TaskChip label={task.category} color="white" bg="#2b85ca" />
         </Stack>
 
-        <Button
-          onClick={openModal}
-          size="small"
-          sx={{
-            mt: 1,
-            color: "#2b85ca",
-            borderColor: "#2b85ca",
-            border: "1px solid",
-            ml: 0,
-            "&:hover": {
-              backgroundColor: "#dfa2db",
-              color: "#300d17",
-              borderColor: "#dfa2db",
-            },
-          }}
-        >
+        <Button onClick={openModal} size="small" sx={editBtnSx}>
           Редактировать
         </Button>
       </CardActions>
