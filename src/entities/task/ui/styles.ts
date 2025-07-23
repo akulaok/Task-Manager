@@ -36,3 +36,20 @@ export const editBtnSx = {
     borderColor: "#dfa2db",
   },
 };
+
+export const commonSx = {
+    minWidth: 120,
+    "& .MuiInputBase-root": {
+      fontSize: 12,
+      padding: "2px 8px",
+      height: 32,
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: 12,
+      top: "-4px",
+    },
+    "& .MuiSelect-select": {
+      paddingTop: "6px",
+      paddingBottom: "6px",
+    },
+  };

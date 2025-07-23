@@ -1,12 +1,23 @@
-import {Box} from "@mui/material";
-import type {Task} from "../model/types";
+import { Box } from "@mui/material";
+import type { Task } from "../model/types";
 import TaskItem from "./TaskItem";
+import type { JSX } from "@emotion/react/jsx-runtime";
 
+/**
+ * Пропсы компонента TaskList
+ * @interface TaskListProps
+ * @property {Task[]} tasks - Список задач для отображения
+ */
 interface TaskListProps {
   tasks: Task[];
 }
 
-function TaskList({tasks}: TaskListProps) {
+/**
+ * Компонент для отображения списка задач в виде сетки карточек.
+ * @param {TaskListProps} props - Пропсы компонента
+ * @returns {JSX.Element} - Сетка карточек задач
+ */
+function TaskList({ tasks }: TaskListProps): JSX.Element {
   return (
     <Box
       display="grid"

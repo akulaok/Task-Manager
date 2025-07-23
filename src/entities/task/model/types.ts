@@ -15,4 +15,5 @@ export interface Task {
   status: TaskStatus;
   category: TaskCategory;
   priority: TaskPriority;
+  creationDate: Date;
 }

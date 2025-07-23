@@ -1,37 +1,67 @@
-import type {JSX} from "react";
-import {Stack, Select, MenuItem, FormControl, InputLabel} from "@mui/material";
-import type {TaskFiltersState} from "../model/taskFilterSlice";
+import type { JSX } from "react";
+import {
+  Stack,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
+import type { TaskFiltersState } from "../model/taskFilterSlice";
 import {
   TASK_PRIORITIES,
   TASK_CATEGORIES,
   TASK_STATUSES,
 } from "../model/taskOptions";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import { commonSx } from "./styles";
 
+/**
+ * Props для компонента панели фильтров задач.
+ * @interface TaskFilterPanelProps
+ * @property {TaskFiltersState} selected - Текущие выбранные фильтры.
+ * @property {(key: keyof TaskFiltersState, value: string | null) => void} onSelect - Коллбэк при изменении фильтра.
+ */
 interface TaskFilterPanelProps {
   selected: TaskFiltersState;
   onSelect: (key: keyof TaskFiltersState, value: string | null) => void;
 }
 
+/** 
+ * Массив конфигураций фильтров для отображения в панели.
+ * Каждый фильтр содержит метку, ключ состояния и допустимые значения.
+ */
+const filters = [
+  { label: "Приоритет", key: "priority", values: TASK_PRIORITIES },
+  { label: "Категория", key: "category", values: TASK_CATEGORIES },
+  { label: "Статус", key: "status", values: TASK_STATUSES },
+] as const;
+
+/**
+ * Компонент панели фильтров задач.
+ * Отображает выпадающие списки для выбора фильтров приоритета, категории и статуса.
+ * Также содержит кнопку для создания новой задачи.
+ * 
+ * @param {TaskFilterPanelProps} props - Пропсы компонента.
+ * @returns {JSX.Element} - React элемент панели фильтров.
+ */
 function TaskFilterPanel({
   selected,
   onSelect,
 }: TaskFilterPanelProps): JSX.Element {
-  const commonSx = {
-    minWidth: 120,
-    "& .MuiInputBase-root": {
-      fontSize: 12,
-      padding: "2px 8px",
-      height: 32,
-    },
-    "& .MuiInputLabel-root": {
-      fontSize: 12,
-      top: "-4px",
-    },
-    "& .MuiSelect-select": {
-      paddingTop: "6px",
-      paddingBottom: "6px",
-    },
-  };
+
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const openModal = useCallback(() => {
+    navigate(`/task/new`, {
+      state: { backgroundLocation: location },
+    });
+  }, [navigate, location]);
 
   return (
     <Stack
@@ -44,62 +74,41 @@ function TaskFilterPanel({
         gap: 1,
       }}
     >
-      <FormControl size="small" sx={commonSx}>
-        <InputLabel>Приоритет</InputLabel>
-        <Select
-          value={selected.priority ?? ""}
-          label="Приоритет"
-          onChange={(e) => {
-            const value = e.target.value;
-            onSelect("priority", value === "" ? null : value);
-          }}
-        >
-          <MenuItem value="">Без фильтра</MenuItem>
-          {TASK_PRIORITIES.map((priority) => (
-            <MenuItem key={priority} value={priority}>
-              {priority}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      {filters.map(({ label, key, values }) => (
+        <FormControl key={key} size="small" sx={commonSx}>
+          <InputLabel>{label}</InputLabel>
+          <Select
+            value={selected[key] ?? ""}
+            label={label}
+            onChange={(e) => {
+              const value = e.target.value;
+              onSelect(key, value === "" ? null : value);
+            }}
+          >
+            <MenuItem value="">Без фильтра</MenuItem>
+            {values.map((v) => (
+              <MenuItem key={v} value={v}>
+                {v}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      ))}
 
-      <FormControl size="small" sx={commonSx}>
-        <InputLabel>Категория</InputLabel>
-        <Select
-          value={selected.category ?? ""}
-          label="Категория"
-          onChange={(e) => {
-            const value = e.target.value;
-            onSelect("category", value === "" ? null : value);
+      <Tooltip title="Новая задача">
+        <IconButton
+          sx={{
+            mt: 0.5,
+            transition: "transform 0.2s",
+            "&:hover": { transform: "scale(1.1)" },
           }}
+          size="small"
+          color="primary"
+          onClick={openModal}
         >
-          <MenuItem value="">Без фильтра</MenuItem>
-          {TASK_CATEGORIES.map((category) => (
-            <MenuItem key={category} value={category}>
-              {category}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <FormControl size="small" sx={commonSx}>
-        <InputLabel>Статус</InputLabel>
-        <Select
-          value={selected.status ?? ""}
-          label="Статус"
-          onChange={(e) => {
-            const value = e.target.value;
-            onSelect("status", value === "" ? null : value);
-          }}
-        >
-          <MenuItem value="">Без фильтра</MenuItem>
-          {TASK_STATUSES.map((status) => (
-            <MenuItem key={status} value={status}>
-              {status}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          <AddCircleOutlineIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
     </Stack>
   );
 }

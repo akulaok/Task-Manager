@@ -11,6 +11,8 @@ export const router = createBrowserRouter(
     <Route path="/" element={<AppLayout />}>
       <Route index element={<MainPage />} />
       <Route path="task/:id" element={<MainPage />} />
-    </Route>
+  <Route path="task/new" element={<MainPage />} />
+</Route>
+
   )
 );

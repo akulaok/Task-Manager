@@ -20,6 +20,6 @@ export const getTagStyle = (selected: boolean) => ({
   color: selected ? "white" : "black",
   cursor: "pointer",
   "&:hover": {
-    bgcolor: selected ? "#6e7dd4" : "#efefef", // свой hover цвет
+    bgcolor: selected ? "#6e7dd4" : "#efefef",
   },
 });

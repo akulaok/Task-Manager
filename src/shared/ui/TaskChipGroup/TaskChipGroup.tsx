@@ -1,12 +1,19 @@
 import type {JSX} from "@emotion/react/jsx-runtime";
 import {Chip, Stack} from "@mui/material";
-import {getTagStyle} from "../../../features/ui/TaskDetails/styles";
+import {getTagStyle} from "../../../features/ui/styles";
 
 interface TaskChipGroupProps {
   options: readonly string[];
   onSelect: (value: string) => void;
   selected: string;
 }
+
+/**
+ * Компонент отображает группу чипов (Chip) для выбора одной из переданных опций.
+ *
+ * @param {TaskChipGroupProps} props - Свойства компонента
+ * @returns {JSX.Element} Элемент интерфейса с группой чипов
+ */
 
 function TaskChipGroup({
   options,
