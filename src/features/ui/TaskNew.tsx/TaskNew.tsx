@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
 import {useState} from "react";
 import {Button, Stack, TextField} from "@mui/material";
 import {
@@ -12,7 +11,7 @@ import {
   TASK_PRIORITIES,
   TASK_STATUSES,
 } from "../../../entities/task/model/taskOptions";
-import {addTask} from "../../../entities/task/model/taskSlice";
+import {createTask} from "../../../entities/task/model/taskSlice";
 import type {
   Task,
   TaskCategory,
@@ -21,7 +20,8 @@ import type {
 } from "../../../entities/task/model/types";
 import {modalBoxStyles} from "../styles";
 import TaskChipGroup from "../../../shared/ui/TaskChipGroup/TaskChipGroup";
-import type { initialState } from "../../model/types";
+import type {initialState} from "../../model/types";
+import {useAppDispatch} from "../../../app/hooks";
 
 /**
  * Компонент `TaskNew` представляет модальное окно создания новой задачи.
@@ -32,7 +32,7 @@ import type { initialState } from "../../model/types";
 
 function TaskNew() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [formData, setFormData] = useState<initialState>({
     id: "",
@@ -47,7 +47,7 @@ function TaskNew() {
   const [titleError, setTitleError] = useState(false);
 
   const handleClose = () => {
-    navigate('/');
+    navigate("/");
   };
 
   const handleSave = () => {
@@ -60,7 +60,7 @@ function TaskNew() {
       ...formData,
       id: Date.now().toString(),
     };
-    dispatch(addTask(newTask));
+    dispatch(createTask(newTask));
     navigate(-1);
   };
 
@@ -87,7 +87,7 @@ function TaskNew() {
           helperText={titleError ? "Поле обязательно для заполнения" : ""}
           onChange={(e) => {
             setFormData({...formData, title: e.target.value});
-            if (titleError) setTitleError(false); 
+            if (titleError) setTitleError(false);
           }}
           sx={{mb: 2}}
         />

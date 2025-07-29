@@ -16,9 +16,9 @@ import {useCallback} from "react";
 import {actionSx, cardSx, descriptionSx, editBtnSx} from "./styles";
 import {format} from "date-fns";
 import {ru} from "date-fns/locale";
-import {useDispatch} from "react-redux";
-import {removeTask} from "../model/taskSlice";
+import {deleteTask} from "../model/taskSlice";
 import TaskChip from "./TaskChip";
+import {useAppDispatch} from "../../../app/hooks";
 
 /**
  * Пропсы компонента TaskItem
@@ -36,7 +36,7 @@ interface TaskItemProps {
 function TaskItem({task}: TaskItemProps): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const priorityColor = getPriorityColors(task.priority);
 
   /**
@@ -52,7 +52,7 @@ function TaskItem({task}: TaskItemProps): JSX.Element {
    * Обработчик удаления задачи
    */
   const handleDelete = () => {
-    dispatch(removeTask(task));
+    dispatch(deleteTask(task.id));
   };
 
   return (

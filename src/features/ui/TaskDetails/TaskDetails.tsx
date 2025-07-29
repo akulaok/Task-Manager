@@ -1,29 +1,30 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../app/store";
-import { useCallback, useState } from "react";
-import { Button, Stack, TextField } from "@mui/material";
-import { format } from "date-fns";
-import { ru } from "date-fns/locale";
+import {useNavigate, useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
+import type {RootState} from "../../../app/store";
+import {useCallback, useState} from "react";
+import {Button, Stack, TextField} from "@mui/material";
+import {format} from "date-fns";
+import {ru} from "date-fns/locale";
 
 import {
   TASK_CATEGORIES,
   TASK_PRIORITIES,
   TASK_STATUSES,
 } from "../../../entities/task/model/taskOptions";
-import { updateTask } from "../../../entities/task/model/taskSlice";
+import {updateTask} from "../../../entities/task/model/taskSlice";
 import type {
   Task,
   TaskCategory,
   TaskPriority,
   TaskStatus,
 } from "../../../entities/task/model/types";
-import { modalBoxStyles } from "../styles";
+import {modalBoxStyles} from "../styles";
 import TaskChipGroup from "../../../shared/ui/TaskChipGroup/TaskChipGroup";
-import { editBtnSx } from "../../../entities/task/ui/styles";
+import {editBtnSx} from "../../../entities/task/ui/styles";
+import {useAppDispatch} from "../../../app/hooks";
 
 /**
  * Состояние формы редактирования задачи
@@ -45,8 +46,8 @@ interface TaskFormData {
  */
 function TaskDetails() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { id } = useParams();
+  const dispatch = useAppDispatch();
+  const {id} = useParams();
   const isNewTask = id === "new";
 
   const task = useSelector((state: RootState) =>
@@ -65,7 +66,7 @@ function TaskDetails() {
    */
   const openNewTaskModal = useCallback(() => {
     navigate(`/task/new`, {
-      state: { backgroundLocation: location },
+      state: {backgroundLocation: location},
     });
   }, [navigate]);
 
@@ -73,7 +74,7 @@ function TaskDetails() {
     return (
       <Modal open onClose={handleClose}>
         <Box sx={modalBoxStyles}>
-          <Typography variant="h6" mb={2} sx={{ color: "#2b85ca" }}>
+          <Typography variant="h6" mb={2} sx={{color: "#2b85ca"}}>
             Задача не найдена
           </Typography>
           <Button onClick={openNewTaskModal} size="small" sx={editBtnSx}>
@@ -120,7 +121,7 @@ function TaskDetails() {
       aria-describedby="modal-modal-description"
     >
       <Box sx={modalBoxStyles}>
-        <Typography variant="h6" mb={2} sx={{ color: "#2b85ca" }}>
+        <Typography variant="h6" mb={2} sx={{color: "#2b85ca"}}>
           {isNewTask ? "Создать задачу" : "Редактировать задачу"}
         </Typography>
 
@@ -134,10 +135,10 @@ function TaskDetails() {
           error={titleError}
           helperText={titleError ? "Поле обязательно для заполнения" : ""}
           onChange={(e) => {
-            setFormData({ ...formData, title: e.target.value });
+            setFormData({...formData, title: e.target.value});
             if (titleError) setTitleError(false);
           }}
-          sx={{ mb: 2 }}
+          sx={{mb: 2}}
         />
 
         <TextField
@@ -147,9 +148,9 @@ function TaskDetails() {
           rows={2}
           value={formData.description}
           onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
+            setFormData({...formData, description: e.target.value})
           }
-          sx={{ mb: 2 }}
+          sx={{mb: 2}}
         />
 
         <Typography variant="subtitle2" mb={1}>
@@ -158,7 +159,7 @@ function TaskDetails() {
         <TaskChipGroup
           options={TASK_CATEGORIES}
           onSelect={(label: string) =>
-            setFormData({ ...formData, category: label as TaskCategory })
+            setFormData({...formData, category: label as TaskCategory})
           }
           selected={formData.category}
         />
@@ -170,7 +171,7 @@ function TaskDetails() {
           options={TASK_STATUSES}
           selected={formData.status}
           onSelect={(label) =>
-            setFormData({ ...formData, status: label as TaskStatus })
+            setFormData({...formData, status: label as TaskStatus})
           }
         />
 
@@ -181,7 +182,7 @@ function TaskDetails() {
           options={TASK_PRIORITIES}
           selected={formData.priority}
           onSelect={(label) =>
-            setFormData({ ...formData, priority: label as TaskPriority })
+            setFormData({...formData, priority: label as TaskPriority})
           }
         />
 
@@ -189,7 +190,7 @@ function TaskDetails() {
           Дата создания:
         </Typography>
         <Typography variant="body2" color="text.secondary" mb={2}>
-          {format(formData.creationDate, "d MMMM yyyy, HH:mm", { locale: ru })}
+          {format(formData.creationDate, "d MMMM yyyy, HH:mm", {locale: ru})}
         </Typography>
 
         <Stack direction="row" justifyContent="flex-end" spacing={1}>
