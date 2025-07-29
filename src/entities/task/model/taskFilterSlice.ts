@@ -8,12 +8,14 @@ export interface TaskFiltersState {
   priority: string | null;
   category: string | null;
   status: string | null;
+  search: string | null;
 }
 
 const initialState: TaskFiltersState = {
   priority: null,
   category: null,
   status: null,
+  search: null,
 };
 
 const taskFilterSlice = createSlice({

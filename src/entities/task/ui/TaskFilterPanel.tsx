@@ -7,6 +7,8 @@ import {
   Tooltip,
   IconButton,
   Box,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import type {TaskFiltersState} from "../model/taskFilterSlice";
 import {
@@ -15,9 +17,10 @@ import {
   TASK_STATUSES,
 } from "../model/taskOptions";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import SearchIcon from "@mui/icons-material/Search";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useCallback} from "react";
-import {commonSx} from "./styles";
+import {commonSx, searchSx} from "./styles";
 
 /**
  * Props для компонента панели фильтров задач.
@@ -32,7 +35,6 @@ interface TaskFilterPanelProps {
 
 /**
  * Массив конфигураций фильтров для отображения в панели.
- * Каждый фильтр содержит метку, ключ состояния и допустимые значения.
  */
 const filters = [
   {label: "Приоритет", key: "priority", values: TASK_PRIORITIES},
@@ -44,6 +46,7 @@ const filters = [
  * Компонент панели фильтров задач.
  * Отображает выпадающие списки для выбора фильтров приоритета, категории и статуса.
  * Также содержит кнопку для создания новой задачи.
+ * Так же содержит строку поиска по названию
  *
  * @param {TaskFilterPanelProps} props - Пропсы компонента.
  * @returns {JSX.Element} - React элемент панели фильтров.
@@ -101,19 +104,51 @@ function TaskFilterPanel({
         ))}
       </Box>
 
-      <Tooltip title="Новая задача">
-        <IconButton
-          sx={{
-            transition: "transform 0.2s",
-            "&:hover": {transform: "scale(1.1)"},
-          }}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          flexWrap: "nowrap",
+          flexGrow: 1,
+          minWidth: 0,
+        }}
+      >
+        <TextField
+          variant="outlined"
+          placeholder="Поиск задачи"
+          value={selected.search ?? ""}
+          onChange={(e) => onSelect("search", e.target.value || null)}
           size="small"
-          color="primary"
-          onClick={openModal}
-        >
-          <AddCircleOutlineIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start" sx={{mr: 0.5}}>
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            ...searchSx,
+            flexGrow: 1,
+            minWidth: 0,
+          }}
+        />
+
+        <Tooltip title="Новая задача">
+          <IconButton
+            sx={{
+              transition: "transform 0.2s",
+              "&:hover": {transform: "scale(1.1)"},
+              flexShrink: 0,
+            }}
+            size="small"
+            color="primary"
+            onClick={openModal}
+          >
+            <AddCircleOutlineIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </Box>
     </Box>
   );
 }

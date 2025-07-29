@@ -5,7 +5,7 @@ import {getTasks} from "../../entities/task/model/selectors/GetTasks";
 import TaskList from "../../entities/task/ui/TaskList";
 import TaskFilterPanel from "../../entities/task/ui/TaskFilterPanel";
 import {setFilter} from "../../entities/task/model/taskFilterSlice";
-import { getTaskFilters } from "../../entities/task/model/selectors/GetTaskFilters ";
+import {getTaskFilters} from "../../entities/task/model/selectors/GetTaskFilters ";
 
 function MainPage(): JSX.Element {
   const tasks = useSelector(getTasks);
@@ -16,7 +16,10 @@ function MainPage(): JSX.Element {
     const byPriority = !filters.priority || task.priority === filters.priority;
     const byCategory = !filters.category || task.category === filters.category;
     const byStatus = !filters.status || task.status === filters.status;
-    return byPriority && byCategory && byStatus;
+    const bySearch =
+      !filters.search ||
+      task.title.toLowerCase().startsWith(filters.search.toLowerCase());
+    return byPriority && byCategory && byStatus && bySearch;
   });
 
   return (

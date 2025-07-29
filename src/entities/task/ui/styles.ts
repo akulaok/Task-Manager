@@ -38,18 +38,33 @@ export const editBtnSx = {
 };
 
 export const commonSx = {
-    minWidth: 120,
-    "& .MuiInputBase-root": {
-      fontSize: 12,
-      padding: "2px 8px",
-      height: 32,
-    },
-    "& .MuiInputLabel-root": {
-      fontSize: 12,
-      top: "-4px",
-    },
-    "& .MuiSelect-select": {
-      paddingTop: "6px",
-      paddingBottom: "6px",
-    },
-  };
+  minWidth: 120,
+  "& .MuiInputBase-root": {
+    fontSize: 12,
+    padding: "2px 8px",
+    height: 32,
+  },
+  "& .MuiInputLabel-root": {
+    fontSize: 12,
+    top: "-4px",
+  },
+  "& .MuiSelect-select": {
+    paddingTop: "6px",
+    paddingBottom: "6px",
+  },
+};
+
+export const searchSx = {
+  minWidth: 200,
+  width: "100%",
+  fontSize: 12,
+  height: 32,
+  "& .MuiInputBase-root": {
+    fontSize: 12,
+    padding: "2px 8px",
+    height: 32,
+  },
+  "& input": {
+    padding: 0,
+  },
+};
