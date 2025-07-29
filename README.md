@@ -9,5 +9,5 @@ TS + React + Vite + MUI
 1. Установите зависимости
 ```npm i```
 2. Запустите локально
-```npm run dev```
-
+- сервер в директории server ```npm run dev```
+- клиент в директории client ```npm run dev```
